@@ -11,6 +11,7 @@ public class Expendedor {
     private Deposito<Producto> super8;
     private Deposito<Moneda> monVu;
     private int serieContador = 0;
+    private Producto depositoEspecial;
 
     /**
      * Constructor del expendedor que llena todos los depósitos con productos.
@@ -42,7 +43,7 @@ public class Expendedor {
      * @throws PagoInsuficienteException Si el valor de la moneda no alcanza.
      * @throws NoHayProductoException Si no hay stock del producto.
      */
-    public Producto comprarProducto(Moneda m, TipoProducto tipo)
+    public void comprarProducto(Moneda m, TipoProducto tipo)
             throws PagoIncorrectoException, PagoInsuficienteException, NoHayProductoException {
 
         if (m == null) {
@@ -68,8 +69,13 @@ public class Expendedor {
             vuelto -= 100;
         }
 
-        return producto;
+        depositoEspecial = producto;
     }
+
+    public Producto getProducto() {
+        return depositoEspecial;
+    }
+
 
     /**
      * Metodo que devuelve una moneda del depósito de vuelto.

@@ -19,7 +19,9 @@ public class Comprador {
 
         try {
             TipoProducto tipo = obtenerTipoPorNumero(num);
-            Producto p = exp.comprarProducto(m, tipo);
+            exp.comprarProducto(m, tipo);
+            Producto p = exp.getProducto();
+
             if (p != null) {
                 sabor = p.consumir();
             }
