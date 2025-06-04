@@ -1,5 +1,8 @@
 package org.example.Codigo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * Clase que representa un expendedor de productos (bebidas y dulces).
  */
@@ -12,6 +15,7 @@ public class Expendedor {
     private Deposito<Moneda> monVu;
     private int serieContador = 0;
     private Producto depositoEspecial;
+    private Deposito<Moneda> monComprasExitosas;
 
     /**
      * Constructor del expendedor que llena todos los depósitos con productos.
@@ -19,6 +23,7 @@ public class Expendedor {
      */
     public Expendedor(int cantidad) {
         monVu = new Deposito<>();
+        monComprasExitosas = new Deposito<>();
         coca = new Deposito<>();
         sprite = new Deposito<>();
         fanta = new Deposito<>();
@@ -62,11 +67,11 @@ public class Expendedor {
             monVu.add(m);
             throw new NoHayProductoException("No hay disponibilidad del producto '" + tipo.getNombre() + "'");
         }
+        monComprasExitosas.add(m);
 
-        int vuelto = m.getValor() - tipo.getPrecio();
-        while (vuelto >= 100) {
-            monVu.add(new Moneda100());
-            vuelto -= 100;
+        int cuantoVuelto = m.getValor() - tipo.getPrecio();
+        for(Moneda moneda : vueltoMagico(cuantoVuelto)) {
+            monVu.add(moneda);
         }
 
         depositoEspecial = producto;
@@ -75,6 +80,25 @@ public class Expendedor {
     public Producto getProducto() {
         return depositoEspecial;
     }
+
+    public ArrayList<Moneda> vueltoMagico(int cuantoVuelto) {
+        ArrayList<Moneda> vuelto = new ArrayList<>();
+
+        while(cuantoVuelto >= 1000) {
+            vuelto.add(new Moneda1000());
+            cuantoVuelto -= 1000;
+        }
+        while(cuantoVuelto >= 500) {
+            vuelto.add(new Moneda500());
+            cuantoVuelto -= 500;
+        }
+        while(cuantoVuelto >= 100) {
+            vuelto.add(new Moneda100());
+            cuantoVuelto -= 100;
+        }
+        return vuelto;
+    }
+
 
 
     /**
