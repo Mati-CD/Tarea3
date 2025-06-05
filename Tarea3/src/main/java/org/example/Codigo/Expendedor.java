@@ -99,6 +99,14 @@ public class Expendedor {
         return vuelto;
     }
 
+    public Deposito<Producto> getDepositoCoca() { return coca; }
+    public Deposito<Producto> getDepositoSprite() { return sprite; }
+    public Deposito<Producto> getDepositoFanta() { return fanta; }
+    public Deposito<Producto> getDepositoSnickers() { return snickers; }
+    public Deposito<Producto> getDepositoSuper8() { return super8; }
+
+    public Deposito<Moneda> getDepositomonVu() { return monVu; }
+    public Deposito<Moneda> getDepositomonComprasExitosas() { return monComprasExitosas; }
 
 
     /**
