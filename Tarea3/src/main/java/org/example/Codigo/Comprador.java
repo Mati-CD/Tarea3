@@ -21,17 +21,20 @@ public class Comprador {
         vuelto = 0;
         sabor = null;
 
-        TipoProducto tipo = obtenerTipoPorNumero(num);
-        exp.comprarProducto(m, tipo);
-        Producto p = exp.getProducto();
+        try {
+            TipoProducto tipo = obtenerTipoPorNumero(num);
+            exp.comprarProducto(m, tipo);
+            Producto p = exp.getProducto();
 
-        if (p != null) {
-            sabor = p.consumir();
-        }
-
-        Moneda moneda;
-        while ((moneda = exp.getVuelto()) != null) {
-            vuelto += moneda.getValor();
+            if (p != null) {
+                sabor = p.consumir();
+            }
+        } finally {
+            // Evita acumular vueltos anteriores en "vuelto" en caso de que se lanzen excepciones
+            Moneda moneda;
+            while ((moneda = exp.getVuelto()) != null) {
+                vuelto += moneda.getValor();
+            }
         }
     }
 
