@@ -12,21 +12,21 @@ public class Comprador {
      * @param m Moneda usada para pagar.
      * @param num Número que indica el producto deseado.
      * @param exp Expendedor donde se realiza la compra.
+     * @throws PagoIncorrectoException Si no se entrega moneda.
+     * @throws PagoInsuficienteException Si el valor de la moneda no alcanza.
+     * @throws NoHayProductoException Si no hay stock del producto.
      */
-    public Comprador(Moneda m, int num, Expendedor exp) {
+    public Comprador(Moneda m, int num, Expendedor exp)
+            throws PagoIncorrectoException, PagoInsuficienteException, NoHayProductoException {
         vuelto = 0;
         sabor = null;
 
-        try {
-            TipoProducto tipo = obtenerTipoPorNumero(num);
-            exp.comprarProducto(m, tipo);
-            Producto p = exp.getProducto();
+        TipoProducto tipo = obtenerTipoPorNumero(num);
+        exp.comprarProducto(m, tipo);
+        Producto p = exp.getProducto();
 
-            if (p != null) {
-                sabor = p.consumir();
-            }
-        } catch (PagoIncorrectoException | PagoInsuficienteException | NoHayProductoException e) {
-            System.out.println("ERROR: " + e.getMessage());
+        if (p != null) {
+            sabor = p.consumir();
         }
 
         Moneda moneda;

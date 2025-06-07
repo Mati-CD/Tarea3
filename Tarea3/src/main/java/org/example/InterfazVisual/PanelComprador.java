@@ -68,7 +68,7 @@ public class PanelComprador extends JPanel {
             lblEstado.setForeground(new Color(0, 100, 0));
 
         } catch (Exception ex) {
-            lblEstado.setText("Error: " + ex.getMessage());
+            lblEstado.setText("ERROR: " + ex.getMessage());
             lblEstado.setForeground(Color.RED);
         }
     }
