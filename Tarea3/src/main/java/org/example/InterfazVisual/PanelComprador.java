@@ -103,8 +103,10 @@ public class PanelComprador extends JPanel {
             }
 
             Moneda moneda = retirarMoneda(valorMoneda);
-            actualizarComboMonedas();
+            System.out.println("Introduciendo $" + valorMoneda + " (n° " + moneda.getSerie() + ")");
             Comprador comprador = new Comprador(moneda, tipoSeleccionado.ordinal() + 1, expendedor);
+            System.out.println("Recibiendo " + tipoSeleccionado.getNombre() +
+                    " (n° " + expendedor.getProducto().getSerie() + ")\n");
 
             lblEstado.setText("Compra exitosa! Producto: " + comprador.queConsumiste() +
                     " - Vuelto: $" + comprador.cuantoVuelto());
@@ -113,6 +115,8 @@ public class PanelComprador extends JPanel {
         } catch (Exception ex) {
             lblEstado.setText("ERROR: " + ex.getMessage());
             lblEstado.setForeground(Color.RED);
+        } finally {
+            actualizarComboMonedas();
         }
     }
 
