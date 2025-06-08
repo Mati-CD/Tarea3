@@ -3,10 +3,6 @@ package org.example.InterfazVisual;
 import org.example.Codigo.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 public class PanelComprador extends JPanel {
@@ -15,6 +11,7 @@ public class PanelComprador extends JPanel {
     private PanelExpendedor panelExpendedor;
     private JComboBox<String> comboMonedas;
     private JButton btnComprar;
+    private JButton btnMonedero;
     private JLabel lblEstado;
 
     public PanelComprador(Expendedor exp, PanelExpendedor panelExp, Deposito<Moneda> dineroInicial) {
@@ -25,14 +22,39 @@ public class PanelComprador extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createTitledBorder("Realizar Compra"));
 
+        // Panel Superior Derecho para monedero
+        JPanel panelSuperiorDerecho = new JPanel();
+        panelSuperiorDerecho.setLayout(new BoxLayout(panelSuperiorDerecho, BoxLayout.Y_AXIS));
+        panelSuperiorDerecho.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
+        JPanel panelMonedero = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelMonedero.add(new JLabel("Monedero:"));
+
+        JComboBox<String> comboMonedero = new JComboBox<>(new String[]{"$100 ", "$500 ", "$1000 "});
+        comboMonedero.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelMonedero.add(comboMonedero);
+
+        // Botón de añadir moneda
+        btnMonedero = new JButton("AÑADIR");
+        btnMonedero.setFont(new Font("Arial", Font.BOLD, 16));
+        btnMonedero.setBackground(new Color(60, 179, 113));
+        btnMonedero.setForeground(Color.WHITE);
+
+        // Panel para el botón
+        JPanel panelBotonMonedero = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelBotonMonedero.add(btnMonedero);
+
+        // Juntar paneles
+        panelSuperiorDerecho.add(panelMonedero);
+        panelSuperiorDerecho.add(panelBotonMonedero);
+
         // Panel superior para selección de moneda
         JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         panelSuperior.add(new JLabel("Seleccione moneda:"));
 
         comboMonedas = new JComboBox<>();
-        actualizarComboMonedas();
-
         comboMonedas.setFont(new Font("Arial", Font.PLAIN, 14));
+        actualizarComboMonedas();
         panelSuperior.add(comboMonedas);
 
         // Botón de compra
@@ -41,25 +63,37 @@ public class PanelComprador extends JPanel {
         btnComprar.setBackground(new Color(70, 130, 180));
         btnComprar.setForeground(Color.WHITE);
 
+        // Panel para el botón
+        JPanel panelBotonComprar = new JPanel();
+        panelBotonComprar.add(btnComprar);
+
         // Etiqueta de estado
         lblEstado = new JLabel(" ", SwingConstants.CENTER);
         lblEstado.setFont(new Font("Arial", Font.ITALIC, 12));
 
-        // Panel para el botón
-        JPanel panelBoton = new JPanel();
-        panelBoton.add(btnComprar);
+        // Juntar paneles superiores
+        JPanel panelSuperiorCompleto = new JPanel(new BorderLayout());
+        panelSuperiorCompleto.add(panelSuperior, BorderLayout.CENTER);
+        panelSuperiorCompleto.add(panelSuperiorDerecho, BorderLayout.EAST);
 
-        add(panelSuperior, BorderLayout.NORTH);
-        add(panelBoton, BorderLayout.CENTER);
+        add(panelSuperiorCompleto, BorderLayout.NORTH);
+        add(panelBotonComprar, BorderLayout.CENTER);
         add(lblEstado, BorderLayout.SOUTH);
 
-        // Configurar evento
+        // Configurar eventos
         btnComprar.addActionListener(e -> realizarCompra());
+
+        btnMonedero.addActionListener((e -> {
+            Moneda moneda = crearMoneda(obtenerValorMoneda(comboMonedero));
+            dineroInicial.add(moneda);
+            actualizarComboMonedas();
+        }));
+
     }
 
     private void realizarCompra() {
         try {
-            int valorMoneda = obtenerValorMoneda();
+            int valorMoneda = obtenerValorMoneda(comboMonedas);
             TipoProducto tipoSeleccionado = panelExpendedor.getProductoSeleccionado();
 
             if (tipoSeleccionado == null) {
@@ -127,9 +161,8 @@ public class PanelComprador extends JPanel {
 
     }
 
-
-    private int obtenerValorMoneda() {
-        String seleccion = (String) comboMonedas.getSelectedItem();
+    private int obtenerValorMoneda(JComboBox combo) {
+        String seleccion = (String) combo.getSelectedItem();
         if(seleccion == null) return 0;
 
         return switch (seleccion.substring(0, seleccion.indexOf(" "))) {
@@ -137,15 +170,6 @@ public class PanelComprador extends JPanel {
             case "$500" -> 500;
             case "$1000" -> 1000;
             default -> 0;
-        };
-    }
-
-    private Moneda crearMoneda(int valor) {
-        return switch (valor) {
-            case 100 -> new Moneda100();
-            case 500 -> new Moneda500();
-            case 1000 -> new Moneda1000();
-            default -> null;
         };
     }
 
@@ -158,5 +182,14 @@ public class PanelComprador extends JPanel {
         }
         // Si no quedan monedas de "valor"
         return null;
+    }
+
+    private Moneda crearMoneda(int valor) {
+        return switch (valor) {
+            case 100 -> new Moneda100();
+            case 500 -> new Moneda500();
+            case 1000 -> new Moneda1000();
+            default -> null;
+        };
     }
 }
