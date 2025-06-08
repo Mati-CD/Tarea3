@@ -1,6 +1,7 @@
 package org.example.Codigo;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Clase genérica que representa un depósito de objetos (productos o monedas).
@@ -37,7 +38,7 @@ public class Deposito<T> {
         return elementos.size();
     }
 
-    public ArrayList<T> getDeposito() {
-        return new ArrayList<>(elementos);
+    public List<T> getDeposito() {
+        return elementos;
     }
 }

@@ -1,6 +1,7 @@
 package org.example.InterfazVisual;
 
-import org.example.Codigo.Expendedor;
+import org.example.Codigo.*;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,9 +16,17 @@ public class PanelPrincipal extends JPanel {
         // Crear expendedor con 5 productos de cada tipo
         Expendedor expendedor = new Expendedor(5);
 
+        // Dinero inicial del comprador
+        Deposito<Moneda> dineroInicial = new Deposito<>();
+        for(int i=0; i < 6; i++) {
+            dineroInicial.add(new Moneda100());
+            dineroInicial.add(new Moneda500());
+            dineroInicial.add(new Moneda1000());
+        }
+
         // Configurar paneles (ahora el comprador necesita referencia al expendedor)
         panelExpendedor = new PanelExpendedor(expendedor);
-        panelComprador = new PanelComprador(expendedor, panelExpendedor);
+        panelComprador = new PanelComprador(expendedor, panelExpendedor, dineroInicial);
 
         // Título
         JLabel titulo = new JLabel("EXPENDEDOR", SwingConstants.CENTER);

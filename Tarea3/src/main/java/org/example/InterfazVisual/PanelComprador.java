@@ -4,17 +4,23 @@ import org.example.Codigo.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 
 public class PanelComprador extends JPanel {
+    private Deposito<Moneda> dineroInicial;
     private Expendedor expendedor;
     private PanelExpendedor panelExpendedor;
     private JComboBox<String> comboMonedas;
     private JButton btnComprar;
     private JLabel lblEstado;
 
-    public PanelComprador(Expendedor exp, PanelExpendedor panelExp) {
+    public PanelComprador(Expendedor exp, PanelExpendedor panelExp, Deposito<Moneda> dineroInicial) {
         this.expendedor = exp;
         this.panelExpendedor = panelExp;
+        this.dineroInicial = dineroInicial;
 
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createTitledBorder("Realizar Compra"));
@@ -23,7 +29,9 @@ public class PanelComprador extends JPanel {
         JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         panelSuperior.add(new JLabel("Seleccione moneda:"));
 
-        comboMonedas = new JComboBox<>(new String[]{"$100", "$500", "$1000"});
+        comboMonedas = new JComboBox<>();
+        actualizarComboMonedas();
+
         comboMonedas.setFont(new Font("Arial", Font.PLAIN, 14));
         panelSuperior.add(comboMonedas);
 
@@ -60,7 +68,8 @@ public class PanelComprador extends JPanel {
                 return;
             }
 
-            Moneda moneda = crearMoneda(valorMoneda);
+            Moneda moneda = retirarMoneda(valorMoneda);
+            actualizarComboMonedas();
             Comprador comprador = new Comprador(moneda, tipoSeleccionado.ordinal() + 1, expendedor);
 
             lblEstado.setText("Compra exitosa! Producto: " + comprador.queConsumiste() +
@@ -73,9 +82,57 @@ public class PanelComprador extends JPanel {
         }
     }
 
+    private void actualizarComboMonedas() {
+        String seleccionAnterior = (String) comboMonedas.getSelectedItem();
+        String cualValor = seleccionAnterior != null
+                ? seleccionAnterior.substring(0, seleccionAnterior.indexOf('(')).trim()
+                : null;
+
+        comboMonedas.removeAllItems();  // Limpiar "visualmente" el combo
+
+        int cantidad100 = 0;
+        int cantidad500 = 0;
+        int cantidad1000 = 0;
+
+        for (Moneda m: dineroInicial.getDeposito()) {
+            switch (m.getValor()) {
+                case 100 -> cantidad100++;
+                case 500 -> cantidad500++;
+                case 1000 -> cantidad1000++;
+                default -> {}
+            }
+        }
+
+        String[] eleccionMoneda = {
+                "$100 (" + cantidad100 + ")",
+                "$500 (" + cantidad500 + ")",
+                "$1000 (" + cantidad1000 + ")"
+        };
+
+        for (String eleccion : eleccionMoneda) {
+            comboMonedas.addItem(eleccion);
+        }
+
+        // Mantener selección anterior "visual" de la moneda
+        if (cualValor != null) {
+            for (int i = 0; i < comboMonedas.getItemCount(); i++) {
+                String item = comboMonedas.getItemAt(i);
+
+                if (item.startsWith(cualValor)) {
+                    comboMonedas.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+
+    }
+
+
     private int obtenerValorMoneda() {
         String seleccion = (String) comboMonedas.getSelectedItem();
-        return switch (seleccion) {
+        if(seleccion == null) return 0;
+
+        return switch (seleccion.substring(0, seleccion.indexOf(" "))) {
             case "$100" -> 100;
             case "$500" -> 500;
             case "$1000" -> 1000;
@@ -90,5 +147,16 @@ public class PanelComprador extends JPanel {
             case 1000 -> new Moneda1000();
             default -> null;
         };
+    }
+
+    private Moneda retirarMoneda(int valor) {
+        for(Moneda m : dineroInicial.getDeposito()) {
+            if(m.getValor() == valor) {
+                dineroInicial.getDeposito().remove(m);
+                return m;
+            }
+        }
+        // Si no quedan monedas de "valor"
+        return null;
     }
 }
