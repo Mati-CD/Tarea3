@@ -15,11 +15,13 @@ public class PanelExpendedor extends JPanel {
     private TipoProducto productoSeleccionado;
     private JLabel lblImagen;
     private JLabel lblPrecio;
+    private Map<TipoProducto, JLabel> lblStock;
     private Map<TipoProducto, ImageIcon> imagenesProductos;
 
     public PanelExpendedor(Expendedor exp) {
         this.expendedor = exp;
         this.panelesProductos = new HashMap<>();
+        this.lblStock = new HashMap<>();
 
         setLayout(new GridLayout(1, 2, 15, 15));
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -131,6 +133,19 @@ public class PanelExpendedor extends JPanel {
         label.setForeground(Color.WHITE);
         panel.add(label, BorderLayout.CENTER);
 
+        JLabel stock = new JLabel("Stock (" + expendedor.seleccionarDeposito(tipo).size() + ")", SwingConstants.CENTER);
+        stock.setFont(new Font("Arial", Font.BOLD, 14));
+        stock.setForeground(Color.WHITE);
+
+        JPanel panelStock = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 24));
+        panelStock.setOpaque(false);
+        panelStock.add(stock);
+
+        panel.add(panelStock, BorderLayout.EAST);
+
+        // Etiqueta de stock
+        lblStock.put(tipo, stock);
+
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -178,6 +193,16 @@ public class PanelExpendedor extends JPanel {
 
         revalidate();
         repaint();
+    }
+
+    public void actualizarStock() {
+        for(TipoProducto tipo: TipoProducto.values()) {
+            JLabel stock = lblStock.get(tipo);
+            if(stock != null) {
+                int stockActual = expendedor.seleccionarDeposito(tipo).size();
+                stock.setText("Stock (" + stockActual + ")");
+            }
+        }
     }
 
     public TipoProducto getProductoSeleccionado() {

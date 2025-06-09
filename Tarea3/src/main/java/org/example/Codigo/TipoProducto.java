@@ -4,11 +4,11 @@ package org.example.Codigo;
  * EnumeraciÃ³n para los diferentes tipos de productos disponibles en el expendedor.
  */
 public enum TipoProducto {
-    COCA_COLA("CocaCola", 1000),
-    SPRITE("Sprite", 1000),
-    FANTA("Fanta", 1000),
-    SNICKERS("Snickers", 700),
-    SUPER8("Super8", 700);
+    COCA_COLA("CocaCola", 800),
+    SPRITE("Sprite", 700),
+    FANTA("Fanta", 700),
+    SNICKERS("Snickers", 400),
+    SUPER8("Super8", 500);
 
     private final String nombre;
     private final int precio;

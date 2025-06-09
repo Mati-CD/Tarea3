@@ -104,10 +104,12 @@ public class PanelComprador extends JPanel {
 
             Moneda moneda = retirarMoneda(valorMoneda);
             System.out.println("Introduciendo $" + valorMoneda + " (n° " + moneda.getSerie() + ")");
+
             Comprador comprador = new Comprador(moneda, tipoSeleccionado.ordinal() + 1, expendedor);
             System.out.println("Recibiendo " + tipoSeleccionado.getNombre() +
                     " (n° " + expendedor.getProducto().getSerie() + ")\n");
 
+            panelExpendedor.actualizarStock();
             lblEstado.setText("Compra exitosa! Producto: " + comprador.queConsumiste() +
                     " - Vuelto: $" + comprador.cuantoVuelto());
             lblEstado.setForeground(new Color(0, 100, 0));
