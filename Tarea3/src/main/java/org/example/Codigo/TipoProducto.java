@@ -1,7 +1,7 @@
 package org.example.Codigo;
 
 /**
- * EnumeraciÃ³n para los diferentes tipos de productos disponibles en el expendedor.
+ * Enumeracion para los diferentes tipos de productos disponibles en el expendedor.
  */
 public enum TipoProducto {
     COCA_COLA("CocaCola", 1000),

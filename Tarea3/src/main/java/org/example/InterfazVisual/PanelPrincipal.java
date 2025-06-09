@@ -9,6 +9,11 @@ public class PanelPrincipal extends JPanel {
     private PanelExpendedor panelExpendedor;
     private PanelComprador panelComprador;
 
+    /**
+     * Constructor que inicializa en el panel principal el sistema Comprador-Expendedor.
+     * Se crea un expendedor con 5 unidades de cada tipo de producto y un depósito
+     * inicial con una suma de monedas para que el comprador pueda hacer compras.
+     */
     public PanelPrincipal() {
         setLayout(new BorderLayout());
         setBackground(new Color(240, 240, 240));

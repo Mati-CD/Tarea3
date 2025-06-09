@@ -3,6 +3,11 @@ package org.example.InterfazVisual;
 import javax.swing.*;
 
 public class Ventana extends JFrame {
+    /**
+     * Constructor que inicializa la ventana principal del expendedor.
+     * Configura el título, tamaño, y agrega el panel principal
+     * que contiene el sistema Comprador-Expendedor.
+     */
     public Ventana() {
         setTitle("Expendedor");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

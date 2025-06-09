@@ -19,6 +19,11 @@ public class PanelExpendedor extends JPanel {
     private Map<TipoProducto, ImageIcon> imagenesProductos;
     private JButton btnRestockear;
 
+    /**
+     * Constructor del panel expendedor.
+     * Inicializa componentes gráficos, carga imágenes y configura eventos de mouse.
+     * @param exp Instancia del expendedor para interactuar con los productos.
+     */
     public PanelExpendedor(Expendedor exp) {
         this.expendedor = exp;
         this.panelesProductos = new HashMap<>();
@@ -80,6 +85,10 @@ public class PanelExpendedor extends JPanel {
         });
     }
 
+    /**
+     * Carga y redimensiona las imágenes asociadas a cada producto.
+     * @return Mapa con imágenes para cada tipo de producto.
+     */
     private Map<TipoProducto, ImageIcon> cargarImagenes() {
         Map<TipoProducto, ImageIcon> imagenes = new HashMap<>();
         String basePath = "/productos/";  // ← AJUSTADO PARA RESOURCES
@@ -115,6 +124,7 @@ public class PanelExpendedor extends JPanel {
         }
     }
 
+
     private ImageIcon redimensionarImagen(ImageIcon icono, int ancho, int alto) {
         if (icono == null) return crearImagenReemplazo(null, ancho, alto);
 
@@ -143,6 +153,12 @@ public class PanelExpendedor extends JPanel {
         return new ImageIcon(img);
     }
 
+    /**
+     * Crea el panel para cada producto con su nombre y stock disponible,
+     * y agrega eventos de mouse para seleccionar el producto.
+     * @param tipo Tipo de producto.
+     * @return JPanel representando el producto.
+     */
     private JPanel crearPanelProducto(TipoProducto tipo) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(getColorProducto(tipo));
@@ -207,6 +223,11 @@ public class PanelExpendedor extends JPanel {
         actualizarVistaDetallada(tipo);
     }
 
+    /**
+     * Actualiza la vista detallada del producto seleccionado,
+     * mostrando imagen, precio y habilitando el botón de re-stock si corresponde.
+     * @param tipo Producto seleccionado.
+     */
     private void actualizarVistaDetallada(TipoProducto tipo) {
         lblImagen.setIcon(imagenesProductos.get(tipo));
         lblPrecio.setText("Precio: $" + tipo.getPrecio());
@@ -219,6 +240,10 @@ public class PanelExpendedor extends JPanel {
         repaint();
     }
 
+    /**
+     * Actualiza las etiquetas de stock en cada panel de cada producto
+     * y controla visibilidad del botón de re-stock.
+     */
     public void actualizarStock() {
         boolean agotado = false;
 
@@ -235,10 +260,19 @@ public class PanelExpendedor extends JPanel {
         btnRestockear.setVisible(agotado);      // Si hay "al menos un" producto agotado
     }
 
+    /**
+     * Obtiene el producto actualmente seleccionado.
+     * @return TipoProducto seleccionado o null si no hay selección.
+     */
     public TipoProducto getProductoSeleccionado() {
         return productoSeleccionado;
     }
 
+    /**
+     * Obtiene un color representativo para cada tipo de producto.
+     * @param tipo TipoProducto.
+     * @return Color asociado.
+     */
     private Color getColorProducto(TipoProducto tipo) {
         switch (tipo) {
             case COCA_COLA: return Color.RED;

@@ -77,10 +77,11 @@ public class Expendedor {
         depositoEspecial = producto;
     }
 
-    public Producto getProducto() {
-        return depositoEspecial;
-    }
-
+    /**
+     * Calcula la mejor distribucion de vuelto a entregar en monedas.
+     * @param cuantoVuelto Monto total del vuelto a devolver.
+     * @return Lista de monedas que suman el monto del vuelto.
+     */
     public ArrayList<Moneda> vueltoMagico(int cuantoVuelto) {
         ArrayList<Moneda> vuelto = new ArrayList<>();
 
@@ -129,6 +130,11 @@ public class Expendedor {
         }
     }
 
+    /**
+     * Rellena el depósito correspondiente en caso de que se haya vaciado.
+     * @param tipo Tipo de producto a reponer.
+     * @param cantidad Cantidad de productos a agregar.
+     */
     public void restockear(TipoProducto tipo, int cantidad) {
         for (int i = 0; i < cantidad; i++) {
             switch (tipo) {
@@ -151,6 +157,14 @@ public class Expendedor {
                     throw new IllegalArgumentException("Tipo de producto no válido.");
             }
         }
+    }
+
+    /**
+     * Obtiene el producto que fue entregado si la compra fue exitosa.
+     * @return Producto entregado.
+     */
+    public Producto getProducto() {
+        return depositoEspecial;
     }
 
 }

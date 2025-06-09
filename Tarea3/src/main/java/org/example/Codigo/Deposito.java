@@ -34,10 +34,18 @@ public class Deposito<T> {
         return elementos.remove(0);
     }
 
+    /**
+     * Obtiene la cantidad de elementos almacenados en el depósito.
+     * @return Número de elementos actuales en el depósito.
+     */
     public int size() {
         return elementos.size();
     }
 
+    /**
+     * Devuelve la lista completa de elementos almacenados en el depósito.
+     * @return Lista con todos los elementos del depósito.
+     */
     public List<T> getDeposito() {
         return elementos;
     }

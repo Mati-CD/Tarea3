@@ -14,6 +14,13 @@ public class PanelComprador extends JPanel {
     private JButton btnMonedero;
     private JLabel lblEstado;
 
+    /**
+     * Constructor del panel comprador.
+     * Inicializa componentes gráficos, depósitos y configura eventos.
+     * @param exp Instancia del expendedor de productos.
+     * @param panelExp Panel que muestra el expendedor.
+     * @param dineroInicial Depósito inicial de monedas disponibles para comprar.
+     */
     public PanelComprador(Expendedor exp, PanelExpendedor panelExp, Deposito<Moneda> dineroInicial) {
         this.expendedor = exp;
         this.panelExpendedor = panelExp;
@@ -91,6 +98,10 @@ public class PanelComprador extends JPanel {
 
     }
 
+    /**
+     * Ejecuta el proceso de compra usando la moneda seleccionada y el producto elegido.
+     * Actualiza el stock, devuelve el vuelto y muestra mensajes de éxito o error de ser necesario.
+     */
     private void realizarCompra() {
         try {
             int valorMoneda = obtenerValorMoneda(comboMonedas);
@@ -130,6 +141,10 @@ public class PanelComprador extends JPanel {
         }
     }
 
+    /**
+     * Actualiza el combo de monedas mostrando la cantidad disponible de cada tipo.
+     * Mantiene la selección anterior en caso de intentar realizar una compra.
+     */
     private void actualizarComboMonedas() {
         String seleccionAnterior = (String) comboMonedas.getSelectedItem();
         String cualValor = seleccionAnterior != null
@@ -175,6 +190,11 @@ public class PanelComprador extends JPanel {
 
     }
 
+    /**
+     * Extrae el valor numérico de la moneda seleccionada en el combo.
+     * @param combo ComboBox que contiene los tipo de monedas.
+     * @return Valor de la moneda (100, 500, 1000) o 0 si no hay selección válida.
+     */
     private int obtenerValorMoneda(JComboBox combo) {
         String seleccion = (String) combo.getSelectedItem();
         if(seleccion == null) return 0;
@@ -187,6 +207,11 @@ public class PanelComprador extends JPanel {
         };
     }
 
+    /**
+     * Retira una moneda del deposito dineroDisponible que coincida con el valor dado.
+     * @param valor Valor de la moneda a retirar.
+     * @return Moneda retirada o null si no hay ninguna con ese valor en el deposito.
+     */
     private Moneda retirarMoneda(int valor) {
         for(Moneda m : dineroDisponible.getDeposito()) {
             if(m.getValor() == valor) {
@@ -198,6 +223,11 @@ public class PanelComprador extends JPanel {
         return null;
     }
 
+    /**
+     * Crea magicamente una moneda según el valor especificado.
+     * @param valor Valor de la moneda (100, 500, 1000).
+     * @return Nueva instancia de moneda correspondiente o null si valor es inválido.
+     */
     private Moneda crearMoneda(int valor) {
         return switch (valor) {
             case 100 -> new Moneda100();
