@@ -103,7 +103,10 @@ public class PanelComprador extends JPanel {
             }
 
             Moneda moneda = retirarMoneda(valorMoneda);
-            System.out.println("Introduciendo $" + valorMoneda + " (n° " + moneda.getSerie() + ")");
+
+            if (moneda != null) {
+                System.out.println("Introduciendo $" + valorMoneda + " (n° " + moneda.getSerie() + ")");
+            }
 
             Comprador comprador = new Comprador(moneda, tipoSeleccionado.ordinal() + 1, expendedor);
             System.out.println("Recibiendo " + tipoSeleccionado.getNombre() +
