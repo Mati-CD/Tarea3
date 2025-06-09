@@ -6,7 +6,7 @@ import java.awt.*;
 
 
 public class PanelComprador extends JPanel {
-    private Deposito<Moneda> dineroInicial;
+    private Deposito<Moneda> dineroDisponible;
     private Expendedor expendedor;
     private PanelExpendedor panelExpendedor;
     private JComboBox<String> comboMonedas;
@@ -17,7 +17,7 @@ public class PanelComprador extends JPanel {
     public PanelComprador(Expendedor exp, PanelExpendedor panelExp, Deposito<Moneda> dineroInicial) {
         this.expendedor = exp;
         this.panelExpendedor = panelExp;
-        this.dineroInicial = dineroInicial;
+        this.dineroDisponible = dineroInicial;
 
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createTitledBorder("Realizar Compra"));
@@ -27,7 +27,7 @@ public class PanelComprador extends JPanel {
         panelSuperiorDerecho.setLayout(new BoxLayout(panelSuperiorDerecho, BoxLayout.Y_AXIS));
         panelSuperiorDerecho.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
-        JPanel panelMonedero = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel panelMonedero = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         panelMonedero.add(new JLabel("Monedero:"));
 
         JComboBox<String> comboMonedero = new JComboBox<>(new String[]{"$100 ", "$500 ", "$1000 "});
@@ -85,7 +85,7 @@ public class PanelComprador extends JPanel {
 
         btnMonedero.addActionListener((e -> {
             Moneda moneda = crearMoneda(obtenerValorMoneda(comboMonedero));
-            dineroInicial.add(moneda);
+            dineroDisponible.add(moneda);
             actualizarComboMonedas();
         }));
 
@@ -112,6 +112,11 @@ public class PanelComprador extends JPanel {
             System.out.println("Recibiendo " + tipoSeleccionado.getNombre() +
                     " (n° " + expendedor.getProducto().getSerie() + ")\n");
 
+            // Entregar en monedas el vuelto al comprador
+            for (Moneda m : expendedor.vueltoMagico(comprador.cuantoVuelto())) {
+                dineroDisponible.add(m);
+            }
+
             panelExpendedor.actualizarStock();
             lblEstado.setText("Compra exitosa! Producto: " + comprador.queConsumiste() +
                     " - Vuelto: $" + comprador.cuantoVuelto());
@@ -137,7 +142,7 @@ public class PanelComprador extends JPanel {
         int cantidad500 = 0;
         int cantidad1000 = 0;
 
-        for (Moneda m: dineroInicial.getDeposito()) {
+        for (Moneda m: dineroDisponible.getDeposito()) {
             switch (m.getValor()) {
                 case 100 -> cantidad100++;
                 case 500 -> cantidad500++;
@@ -183,9 +188,9 @@ public class PanelComprador extends JPanel {
     }
 
     private Moneda retirarMoneda(int valor) {
-        for(Moneda m : dineroInicial.getDeposito()) {
+        for(Moneda m : dineroDisponible.getDeposito()) {
             if(m.getValor() == valor) {
-                dineroInicial.getDeposito().remove(m);
+                dineroDisponible.getDeposito().remove(m);
                 return m;
             }
         }

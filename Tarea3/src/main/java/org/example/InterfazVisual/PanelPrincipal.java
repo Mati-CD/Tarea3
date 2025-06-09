@@ -18,10 +18,10 @@ public class PanelPrincipal extends JPanel {
 
         // Dinero inicial del comprador
         Deposito<Moneda> dineroInicial = new Deposito<>();
-        for(int i=0; i < 6; i++) {
+        for(int i = 0; i < 5; i++) {
             dineroInicial.add(new Moneda100());
-            dineroInicial.add(new Moneda500());
-            dineroInicial.add(new Moneda1000());
+            if(i < 4) dineroInicial.add(new Moneda500());
+            if(i < 3)dineroInicial.add(new Moneda1000());
         }
 
         // Configurar paneles (ahora el comprador necesita referencia al expendedor)
