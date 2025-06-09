@@ -128,4 +128,29 @@ public class Expendedor {
                 throw new IllegalArgumentException("Tipo de producto no válido.");
         }
     }
+
+    public void restockear(TipoProducto tipo, int cantidad) {
+        for (int i = 0; i < cantidad; i++) {
+            switch (tipo) {
+                case COCA_COLA:
+                    coca.add(new CocaCola(serieContador++));
+                    break;
+                case SPRITE:
+                    sprite.add(new Sprite(serieContador++));
+                    break;
+                case FANTA:
+                    fanta.add(new Fanta(serieContador++));
+                    break;
+                case SNICKERS:
+                    snickers.add(new Snickers(serieContador++));
+                    break;
+                case SUPER8:
+                    super8.add(new Super8(serieContador++));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Tipo de producto no válido.");
+            }
+        }
+    }
+
 }

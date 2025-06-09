@@ -17,6 +17,7 @@ public class PanelExpendedor extends JPanel {
     private JLabel lblPrecio;
     private Map<TipoProducto, JLabel> lblStock;
     private Map<TipoProducto, ImageIcon> imagenesProductos;
+    private JButton btnRestockear;
 
     public PanelExpendedor(Expendedor exp) {
         this.expendedor = exp;
@@ -38,6 +39,17 @@ public class PanelExpendedor extends JPanel {
         panelVistaAmpliada = new JPanel(new BorderLayout(10, 10));
         panelVistaAmpliada.setBorder(BorderFactory.createTitledBorder("Vista Detallada"));
 
+        // Configurar boton de reestock
+        btnRestockear = new JButton("RE-STOCKEAR");
+        btnRestockear.setFont(new Font("Arial", Font.BOLD, 16));
+        btnRestockear.setBackground(new Color(255, 140, 0));
+        btnRestockear.setForeground(Color.WHITE);
+        btnRestockear.setVisible(false);
+
+        JPanel panelBtnRestockear = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelBtnRestockear.add(btnRestockear);
+        panelVistaAmpliada.add(panelBtnRestockear, BorderLayout.NORTH);
+
         // Configurar vista de imagen
         lblImagen = new JLabel("", SwingConstants.CENTER);
         panelVistaAmpliada.add(lblImagen, BorderLayout.CENTER);
@@ -57,6 +69,15 @@ public class PanelExpendedor extends JPanel {
 
         add(panelListaProductos);
         add(panelVistaAmpliada);
+
+        // Configurar eventos
+        btnRestockear.addActionListener(e -> {
+            if (productoSeleccionado != null && expendedor.seleccionarDeposito(productoSeleccionado).size() == 0) {
+                expendedor.restockear(productoSeleccionado, 5);
+                actualizarStock();
+                actualizarVistaDetallada(productoSeleccionado);
+            }
+        });
     }
 
     private Map<TipoProducto, ImageIcon> cargarImagenes() {
@@ -191,18 +212,27 @@ public class PanelExpendedor extends JPanel {
         lblPrecio.setText("Precio: $" + tipo.getPrecio());
         lblPrecio.setForeground(getColorProducto(tipo));
 
+        int stockActual = expendedor.seleccionarDeposito(tipo).size();
+        btnRestockear.setVisible(stockActual == 0);     // Mostrar boton en el producto "tipo" solamente
+
         revalidate();
         repaint();
     }
 
     public void actualizarStock() {
+        boolean agotado = false;
+
         for(TipoProducto tipo: TipoProducto.values()) {
             JLabel stock = lblStock.get(tipo);
             if(stock != null) {
                 int stockActual = expendedor.seleccionarDeposito(tipo).size();
                 stock.setText("Stock (" + stockActual + ")");
+                if(stockActual == 0) {
+                    agotado = true;     // Boton de reestock activado
+                }
             }
         }
+        btnRestockear.setVisible(agotado);      // Si hay "al menos un" producto agotado
     }
 
     public TipoProducto getProductoSeleccionado() {
