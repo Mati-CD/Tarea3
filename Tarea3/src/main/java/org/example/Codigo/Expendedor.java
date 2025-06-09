@@ -99,16 +99,6 @@ public class Expendedor {
         return vuelto;
     }
 
-    public Deposito<Producto> getDepositoCoca() { return coca; }
-    public Deposito<Producto> getDepositoSprite() { return sprite; }
-    public Deposito<Producto> getDepositoFanta() { return fanta; }
-    public Deposito<Producto> getDepositoSnickers() { return snickers; }
-    public Deposito<Producto> getDepositoSuper8() { return super8; }
-
-    public Deposito<Moneda> getDepositomonVu() { return monVu; }
-    public Deposito<Moneda> getDepositomonComprasExitosas() { return monComprasExitosas; }
-
-
     /**
      * Metodo que devuelve una moneda del depósito de vuelto.
      * @return Moneda o null si no hay más.
@@ -122,7 +112,7 @@ public class Expendedor {
      * @param tipo Tipo de producto.
      * @return Depósito correspondiente.
      */
-    private Deposito<Producto> seleccionarDeposito(TipoProducto tipo) {
+    public Deposito<Producto> seleccionarDeposito(TipoProducto tipo) {
         switch (tipo) {
             case COCA_COLA:
                 return coca;
